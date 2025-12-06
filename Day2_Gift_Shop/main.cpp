@@ -15,6 +15,10 @@ std::vector<ID_Range> parse_ranges(const std::string &filepath)
 {
   std::ifstream infile(filepath);
   std::string line;
+  if (!std::getline(infile, line))
+  {
+    throw std::runtime_error("Input file is empty or unreadable");
+  }
 
   std::vector<ID_Range> ranges;
   std::stringstream ss(line);
@@ -25,7 +29,7 @@ std::vector<ID_Range> parse_ranges(const std::string &filepath)
     size_t dash = token.find('-');
     if (dash == std::string::npos)
     {
-      throw std::runtime_error("missing '-': " + token);
+      throw std::runtime_error("Invalid range (missing '-'): " + token);
     }
 
     std::string minStr = token.substr(0, dash);
