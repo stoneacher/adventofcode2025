@@ -54,10 +54,34 @@ std::int64_t findDuplicates(const std::vector<ID_Range> &ranges)
     {
       std::string s = std::to_string(id);
       size_t n = s.size();
-      if (n % 2 != 0)
-        continue;
-      size_t half = n / 2;
-      if (s.substr(0, half) == s.substr(half))
+      bool is_repeated = false;
+
+      for (size_t k = 1; k <= n / 2; ++k)
+      {
+        if (n % k != 0)
+          continue;
+        size_t reps = n / k;
+        if (reps < 2)
+          continue;
+
+        std::string part = s.substr(0, k);
+        bool ok = true;
+        for (size_t pos = k; pos < n; pos += k)
+        {
+          if (s.substr(pos, k) != part)
+          {
+            ok = false;
+            break;
+          }
+        }
+        if (ok)
+        {
+          is_repeated = true;
+          break;
+        }
+      }
+
+      if (is_repeated)
       {
         duplicateCount += id;
       }
