@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define DIAL_POSITION_START 50
+
 size_t getFileSize(const char *filepath)
 {
   size_t num_lines = 0;
@@ -58,16 +60,33 @@ int *loadTurns(const char *filepath, size_t *out_count)
   return values;
 }
 
+int calculate_secret_password(int *values, size_t num_values)
+{
+  int dial_pos = DIAL_POSITION_START;
+  size_t zero_count = 0;
+
+  for (size_t i = 0; i < num_values; i++)
+  {
+    dial_pos = (dial_pos + values[i]) % 100;
+    if (dial_pos < 0)
+    {
+      dial_pos += 100;
+    }
+
+    if (dial_pos == 0)
+    {
+      zero_count++;
+    }
+  }
+  return zero_count;
+}
+
 int main(int argc, char *argv[])
 {
   size_t num_values = 0;
   int *values = loadTurns(argv[1], &num_values);
-
-  for (size_t i = 0; i < 10; i++)
-  {
-    printf("%zu: %d\n", i, values[i]);
-  }
-
+  int pw = calculate_secret_password(values, num_values);
+  printf("Secret pw: %d\n", pw);
   free(values);
   return 0;
 }
