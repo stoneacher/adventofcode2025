@@ -11,7 +11,7 @@ typedef struct
   std::int64_t max_;
 } ID_Range;
 
-std::vector<ID_Range> parse_ranges(const std::string &filepath)
+std::vector<ID_Range> parseRanges(const std::string &filepath)
 {
   std::ifstream infile(filepath);
   std::string line;
@@ -44,6 +44,12 @@ std::vector<ID_Range> parse_ranges(const std::string &filepath)
   return ranges;
 }
 
+std::int64_t findDuplicates(const std::vector<ID_Range> &ranges)
+{
+  std::int64_t duplicateCount = 0;
+  return duplicateCount;
+}
+
 int main(int argc, char *argv[])
 {
   std::ifstream infile(argv[1]);
@@ -53,13 +59,16 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  std::vector<ID_Range> ranges = parse_ranges(argv[1]);
+  std::vector<ID_Range> ranges = parseRanges(argv[1]);
 
   std::cout << "Parsed Ranges:" << std::endl;
   for (const auto &range : ranges)
   {
     std::cout << "Min: " << range.min_ << ", Max: " << range.max_ << std::endl;
   }
+
+  std::int64_t pw = findDuplicates(ranges);
+  printf("Duplicate Ranges Count: %lld\n", pw);
 
   return 0;
 }
