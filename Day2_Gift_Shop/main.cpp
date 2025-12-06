@@ -47,6 +47,23 @@ std::vector<ID_Range> parseRanges(const std::string &filepath)
 std::int64_t findDuplicates(const std::vector<ID_Range> &ranges)
 {
   std::int64_t duplicateCount = 0;
+
+  for (const auto &r : ranges)
+  {
+    for (std::int64_t id = r.min_; id <= r.max_; ++id)
+    {
+      std::string s = std::to_string(id);
+      size_t n = s.size();
+      if (n % 2 != 0)
+        continue;
+      size_t half = n / 2;
+      if (s.substr(0, half) == s.substr(half))
+      {
+        duplicateCount += id;
+      }
+    }
+  }
+
   return duplicateCount;
 }
 
@@ -68,7 +85,7 @@ int main(int argc, char *argv[])
   }
 
   std::int64_t pw = findDuplicates(ranges);
-  printf("Duplicate Ranges Count: %lld\n", pw);
+  printf("Sum of invalid IDs: %lld\n", pw);
 
   return 0;
 }
