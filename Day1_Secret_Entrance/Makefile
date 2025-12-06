@@ -1,6 +1,6 @@
 
 all:
-	clang++ main.cpp -o main -Wall -Wextra
+	clang main.c -o main -Wall -Wextra
 
 run:
-	./main input01.txt
+	./main input_01.txt
