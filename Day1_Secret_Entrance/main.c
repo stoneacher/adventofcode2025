@@ -67,10 +67,16 @@ int calculate_secret_password(int *values, size_t num_values)
 
   for (size_t i = 0; i < num_values; i++)
   {
-    dial_pos = (dial_pos + values[i]) % 100;
-    if (dial_pos < 0)
+    dial_pos += values[i];
+    while (dial_pos >= 100)
+    {
+      dial_pos -= 100;
+      zero_count++; // part2
+    }
+    while (dial_pos < 0)
     {
       dial_pos += 100;
+      zero_count++; // part2
     }
 
     if (dial_pos == 0)
