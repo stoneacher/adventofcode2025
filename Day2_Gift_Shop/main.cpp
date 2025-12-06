@@ -1,0 +1,70 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <cstdint>
+
+typedef struct
+{
+  std::int64_t min_;
+  std::int64_t max_;
+} ID_Range;
+
+std::vector<ID_Range> parse_ranges(const std::string &filepath)
+{
+  std::ifstream infile(filepath);
+  if (!infile)
+  {
+    throw std::runtime_error("Error opening file: " + filepath);
+  }
+
+  std::string line;
+  if (!std::getline(infile, line))
+  {
+    throw std::runtime_error("Input file is empty or unreadable");
+  }
+
+  std::vector<ID_Range> ranges;
+  std::stringstream ss(line);
+  std::string token;
+
+  while (std::getline(ss, token, ','))
+  {
+    size_t dash = token.find('-');
+    if (dash == std::string::npos)
+    {
+      throw std::runtime_error("missing '-': " + token);
+    }
+
+    std::string minStr = token.substr(0, dash);
+    std::string maxStr = token.substr(dash + 1);
+
+    std::int64_t minVal = std::stoll(minStr);
+    std::int64_t maxVal = std::stoll(maxStr);
+
+    ranges.push_back({minVal, maxVal});
+  }
+
+  return ranges;
+}
+
+int main(int argc, char *argv[])
+{
+  std::ifstream infile(argv[1]);
+  if (!infile)
+  {
+    std::cerr << "Error opening file: " << argv[1] << std::endl;
+    return 1;
+  }
+
+  std::vector<ID_Range> ranges = parse_ranges(argv[1]);
+
+  std::cout << "Parsed Ranges:" << std::endl;
+  for (const auto &range : ranges)
+  {
+    std::cout << "Min: " << range.min_ << ", Max: " << range.max_ << std::endl;
+  }
+
+  return 0;
+}
