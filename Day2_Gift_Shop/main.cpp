@@ -14,16 +14,7 @@ typedef struct
 std::vector<ID_Range> parse_ranges(const std::string &filepath)
 {
   std::ifstream infile(filepath);
-  if (!infile)
-  {
-    throw std::runtime_error("Error opening file: " + filepath);
-  }
-
   std::string line;
-  if (!std::getline(infile, line))
-  {
-    throw std::runtime_error("Input file is empty or unreadable");
-  }
 
   std::vector<ID_Range> ranges;
   std::stringstream ss(line);
